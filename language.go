@@ -22,6 +22,7 @@ const (
 	Hindi
 )
 
+// String prints the canonical Language name
 func (lang Language) String() string {
 	names := [...]string{
 		"Korean",
