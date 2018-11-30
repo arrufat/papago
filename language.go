@@ -68,7 +68,7 @@ func (lang Language) Code() string {
 
 // FemaleVoice returns the name of the female voice for that Language
 func (lang Language) FemaleVoice() string {
-	names := []string{
+	names := [...]string{
 		"kyuri",  // Korean
 		"clara",  // English
 		"yuri",   // Japanese
@@ -91,7 +91,7 @@ func (lang Language) FemaleVoice() string {
 
 // MaleVoice returns the name of the female voice for that Language
 func (lang Language) MaleVoice() string {
-	names := []string{
+	names := [...]string{
 		"jinho",      // Korean
 		"matt",       // English
 		"shinji",     // Japanese
