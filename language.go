@@ -110,3 +110,23 @@ func (lang Language) MaleVoice() string {
 	}
 	return names[lang]
 }
+
+// Speed controls the TTS speed
+type Speed int32
+
+// Possible values for TTS speed
+const (
+	VerySlow Speed = 5
+	Slow     Speed = 3
+	Normal   Speed = 0
+	Fast     Speed = -1
+)
+
+// Gender used for the TTS
+type Gender int32
+
+// Possible values for Gender
+const (
+	Male = iota
+	Female
+)
