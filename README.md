@@ -1,6 +1,6 @@
-# Papago
+# Papago - unofficial wrapper written in Go
 
-<img src="https://papago.naver.com/79a02f579e43a422f7ec25aec44f45cf.svg" width=320>
+[<img src="https://papago.naver.com/79a02f579e43a422f7ec25aec44f45cf.svg" alt="official website" width=320>](https://papago.naver.com/)
 
 A simple wrapper around the web interface of Naver's Papago written in Go.
 
