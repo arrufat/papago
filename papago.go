@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -26,9 +27,9 @@ const (
 	// DetectURL contains Papago's Language Detection URL.
 	DetectURL string = "https://papago.naver.com/apis/langs/dect"
 	// DetectHeader contains Papago's Language Detection header for a request.
-	DetectHeader string = "\xaeU\xa4\xa8\x92%\xacUzV\xfd "
+	DetectHeader string = "\xaeU\xa4\xa8\x92%\xacUzV\xfd"
 	// DetectParams contains the formating string for a Language Detection request on Papago.
-	DetectParams string = "%s"
+	DetectParams string = "-%s\"}"
 )
 
 // Translate translates the text from source Language to target Language
@@ -90,5 +91,33 @@ func TTS(text string, lang Language, gender Gender) (string, error) {
 	if !ok {
 		return "", errors.New("error decoding TTS type")
 	}
-	return fmt.Sprintf("https://papago.naver.com/apis/tts/%s", ans), nil
+	fileURL := strings.Replace(TtsURL, "makeID", ans, 1)
+	return fileURL, nil
+}
+
+// Detect tries to guess the input language from the given text
+func Detect(text string) (Language, error) {
+	var lang Language
+	params := fmt.Sprintf(DetectParams, text)
+	data := fmt.Sprintf("%s%s", DetectHeader, params)
+	encData := base64.StdEncoding.EncodeToString([]byte(data))
+	body := fmt.Sprintf("data=%s", encData)
+	resp, err := http.Post(DetectURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	if err != nil {
+		return lang, err
+	}
+	bodyByte, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return lang, err
+	}
+	res := make(map[string]interface{})
+	err = json.Unmarshal(bodyByte, &res)
+	if err != nil {
+		return lang, err
+	}
+	ans, ok := res["langCode"].(string)
+	if !ok {
+		return lang, errors.New("error decoding language code")
+	}
+	return ParseLanguageCode(ans)
 }

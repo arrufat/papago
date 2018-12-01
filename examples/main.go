@@ -12,16 +12,30 @@ import (
 func main() {
 	fmt.Println("Papago Examples")
 	text := "Hello, how are you?"
-	trans, err := papago.Translate(text, papago.English, papago.Korean)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(trans)
 
-	tts, err := papago.TTS(trans, papago.English, papago.Male)
+	// language detection
+	sourceLang, err := papago.Detect(text)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("%s detected\n", sourceLang)
+
+	// translation
+	targetLang := papago.Korean
+	fmt.Printf("Translating \"%s\" from %s to %s\n", text, sourceLang, targetLang)
+	trans, err := papago.Translate(text, sourceLang, targetLang)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Translation: %s\n", trans)
+
+	// text to speech
+	tts, err := papago.TTS(trans, targetLang, papago.Female)
+	if err != nil {
+		panic(err)
+	}
+	// file download
+	fmt.Printf("Downloading file from:\n\t%s\n", tts)
 	fileDest := "/tmp/papago.mp3"
 	if err := downloadFile(fileDest, tts); err != nil {
 		fmt.Println(err)

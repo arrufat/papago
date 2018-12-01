@@ -1,5 +1,7 @@
 package papago
 
+import "errors"
+
 // Language defines supported languages by Papago
 type Language int32
 
@@ -21,6 +23,25 @@ const (
 	Indonesian
 	Hindi
 )
+
+// supportedLanguages defines an array of all the supportedLanguages
+var supportedLanguages = []Language{
+	Korean,
+	English,
+	Japanese,
+	Chinese,
+	TraditionalChinese,
+	Spanish,
+	French,
+	German,
+	Russian,
+	Portuguese,
+	Italian,
+	Vietnamese,
+	Thai,
+	Indonesian,
+	Hindi,
+}
 
 // String prints the canonical Language name
 func (lang Language) String() string {
@@ -64,6 +85,17 @@ func (lang Language) Code() string {
 		"hi",    // Hindi
 	}
 	return codes[lang]
+}
+
+// ParseLanguageCode returns the corresponding Language for a given code
+func ParseLanguageCode(code string) (Language, error) {
+	var lang Language
+	for _, lang = range supportedLanguages {
+		if lang.Code() == code {
+			return lang, nil
+		}
+	}
+	return lang, errors.New("unable to parse the language code")
 }
 
 // FemaleVoice returns the name of the female voice for that Language
