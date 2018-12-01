@@ -131,3 +131,11 @@ const (
 	Male = iota
 	Female
 )
+
+func (gender Gender) String() string {
+	names := [...]string{
+		"Male",
+		"Female",
+	}
+	return names[gender]
+}
