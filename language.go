@@ -24,23 +24,25 @@ const (
 	Hindi
 )
 
-// supportedLanguages defines an array of all the supportedLanguages
-var supportedLanguages = []Language{
-	Korean,
-	English,
-	Japanese,
-	Chinese,
-	TraditionalChinese,
-	Spanish,
-	French,
-	German,
-	Russian,
-	Portuguese,
-	Italian,
-	Vietnamese,
-	Thai,
-	Indonesian,
-	Hindi,
+// SupportedLanguages returns the languages supported by Papago
+func SupportedLanguages() []Language {
+	return []Language{
+		Korean,
+		English,
+		Japanese,
+		Chinese,
+		TraditionalChinese,
+		Spanish,
+		French,
+		German,
+		Russian,
+		Portuguese,
+		Italian,
+		Vietnamese,
+		Thai,
+		Indonesian,
+		Hindi,
+	}
 }
 
 // String prints the canonical Language name
@@ -90,7 +92,7 @@ func (lang Language) Code() string {
 // ParseLanguageCode returns the corresponding Language for a given code
 func ParseLanguageCode(code string) (Language, error) {
 	var lang Language
-	for _, lang = range supportedLanguages {
+	for _, lang = range SupportedLanguages() {
 		if lang.Code() == code {
 			return lang, nil
 		}

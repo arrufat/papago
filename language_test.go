@@ -4,23 +4,7 @@ import (
 	"testing"
 )
 
-var langs = []Language{
-	Korean,
-	English,
-	Japanese,
-	Chinese,
-	TraditionalChinese,
-	Spanish,
-	French,
-	German,
-	Russian,
-	Portuguese,
-	Italian,
-	Vietnamese,
-	Thai,
-	Indonesian,
-	Hindi,
-}
+var langs = SupportedLanguages()
 
 var names = [...]string{
 	"Korean",
