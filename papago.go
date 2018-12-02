@@ -23,7 +23,7 @@ const (
 	// TtsHeader contains Papago's TTS header for a request.
 	TtsHeader string = "\xaeU\xae\xa1C\x9b,Uzd\xf8\xef"
 	// TtsParams contains the formating string for a TTS request on Papago.
-	TtsParams string = "pitch\":0,\"speaker\":\"%s\",\"speed\":0,\"text\":\"%s\"}"
+	TtsParams string = "pitch\":0,\"speaker\":\"%s\",\"speed\":%s,\"text\":\"%s\"}"
 	// DetectURL contains Papago's Language Detection URL.
 	DetectURL string = "https://papago.naver.com/apis/langs/dect"
 	// DetectHeader contains Papago's Language Detection header for a request.
@@ -59,18 +59,18 @@ func Translate(text string, source Language, target Language) (string, error) {
 }
 
 // TTS generates a URL to the MP3 file containing the sound
-func TTS(text string, lang Language, gender Gender) (string, error) {
-	var voice string
-	if gender == Male {
-		voice = lang.MaleVoice()
+func TTS(text string, voice Voice) (string, error) {
+	var name string
+	if voice.Gender == Male {
+		name = voice.Language.MaleVoice()
 	} else {
-		voice = lang.FemaleVoice()
+		name = voice.Language.FemaleVoice()
 	}
-	if voice == "" {
-		desc := fmt.Sprintf("%s voice not supported for %s", gender, lang)
+	if name == "" {
+		desc := fmt.Sprintf("%s voice not supported for %s", voice.Gender, voice.Language)
 		return "", errors.New(desc)
 	}
-	params := fmt.Sprintf(TtsParams, voice, text)
+	params := fmt.Sprintf(TtsParams, name, voice.Speed, text)
 	data := fmt.Sprintf("%s%s", TtsHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
 	body := fmt.Sprintf("data=%s", encData)

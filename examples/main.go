@@ -30,7 +30,8 @@ func main() {
 	fmt.Printf("Translation: %s\n", trans)
 
 	// text to speech
-	tts, err := papago.TTS(trans, targetLang, papago.Female)
+	voice := papago.Voice{Language: targetLang, Gender: papago.Female, Speed: papago.Normal}
+	tts, err := papago.TTS(trans, voice)
 	if err != nil {
 		panic(err)
 	}

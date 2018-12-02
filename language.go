@@ -151,11 +151,21 @@ type Speed int32
 
 // Possible values for TTS speed
 const (
-	VerySlow Speed = 5
-	Slow     Speed = 3
-	Normal   Speed = 0
-	Fast     Speed = -1
+	VerySlow Speed = iota
+	Slow
+	Normal
+	Fast
 )
+
+func (speed Speed) String() string {
+	values := [...]string{
+		"5",
+		"3",
+		"0",
+		"-1",
+	}
+	return values[speed]
+}
 
 // Gender used for the TTS
 type Gender int32
@@ -172,4 +182,11 @@ func (gender Gender) String() string {
 		"Female",
 	}
 	return names[gender]
+}
+
+// Voice contains the parameters for text to speech generation
+type Voice struct {
+	Language Language
+	Gender   Gender
+	Speed    Speed
 }
