@@ -7,7 +7,7 @@ A simple wrapper around the web interface of Naver Papago Translate written in G
 ## Installation
 
 ``` bash
-go get -u https://github.com/arrufat/papago
+go get -u github.com/arrufat/papago
 ```
 
 ## Features
