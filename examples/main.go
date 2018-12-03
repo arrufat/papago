@@ -1,31 +1,62 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/arrufat/papago"
 )
 
 func main() {
-	fmt.Println("Papago Examples")
-	text := "Hello, how are you?"
+	source := flag.String("source", "", "code for the source language")
+	target := flag.String("target", "", "code for the target language")
+	list := flag.Bool("list", false, "list all possible language")
+	output := flag.String("output", "", "path to the output file")
+	flag.Parse()
 
-	// language detection
-	sourceLang, err := papago.Detect(text)
-	if err != nil {
-		panic(err)
+	if *list {
+		fmt.Println("Supported language codes:")
+		for i, lang := range papago.SupportedLanguages() {
+			fmt.Printf("%2d: %s => %s\n", i+1, lang, lang.Code())
+		}
+		return
 	}
-	fmt.Printf("%s detected\n", sourceLang)
+
+	if *target == "" {
+		fmt.Println("Specify at least a target language")
+		return
+	}
+
+	// use the rest of the arguments as the input text
+	if len(flag.Args()) == 0 {
+		fmt.Println("Specify some text to translate")
+		return
+	}
+	text := strings.Join(flag.Args()[1:], " ")
+
+	// perform language detection if not source language not specified
+	var sourceLang papago.Language
+	if *source == "" {
+		detectedLang, err := papago.Detect(text)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		sourceLang = detectedLang
+	}
+	fmt.Println(*target)
+	targetLang, err := papago.ParseLanguageCode(*target)
 
 	// translation
-	targetLang := papago.Korean
 	fmt.Printf("Translating \"%s\" from %s to %s\n", text, sourceLang, targetLang)
 	trans, err := papago.Translate(text, sourceLang, targetLang)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	fmt.Printf("Translation: %s\n", trans)
 
@@ -33,16 +64,21 @@ func main() {
 	voice := papago.Voice{Language: targetLang, Gender: papago.Female, Speed: papago.Normal}
 	tts, err := papago.TTS(trans, voice)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
+	if *output == "" {
+		fmt.Printf("Audio file available here:\n\t%s\n", tts)
+		return
+	}
+
 	// file download
 	fmt.Printf("Downloading file from:\n\t%s\n", tts)
-	fileDest := "/tmp/papago.mp3"
-	if err := downloadFile(fileDest, tts); err != nil {
+	if err := downloadFile(*output, tts); err != nil {
 		fmt.Println(err)
-		panic(err)
+		return
 	}
-	fmt.Printf("Audio file downloaded to %s\n", fileDest)
+	fmt.Printf("Audio file downloaded to %s\n", *output)
 }
 
 func downloadFile(filepath string, url string) error {
