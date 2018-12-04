@@ -12,33 +12,33 @@ import (
 )
 
 const (
-	// TranslateURL contains Papago's translation URL.
-	TranslateURL string = "https://papago.naver.com/apis/n2mt/translate"
-	// TranslateHeader contains Papago's translation header for a request.
-	TranslateHeader string = "\xaeU\xb10\xa3\x1c/b\x160\xf5z\"7b0e4eca-c538-417f-8bf5-43a9e6ef160b\","
-	// TranslateParams contains the formating string for a translation request on Papago.
-	TranslateParams string = "\"dict\":true,\"dictDisplay\":30,\"source\":\"%s\",\"target\":\"%s\",\"text\":\"%s\"}"
-	// TtsURL contains Papago's TTS URL.
-	TtsURL string = "https://papago.naver.com/apis/tts/makeID"
-	// TtsHeader contains Papago's TTS header for a request.
-	TtsHeader string = "\xaeU\xae\xa1C\x9b,Uzd\xf8\xef"
-	// TtsParams contains the formating string for a TTS request on Papago.
-	TtsParams string = "pitch\":0,\"speaker\":\"%s\",\"speed\":%s,\"text\":\"%s\"}"
-	// DetectURL contains Papago's Language Detection URL.
-	DetectURL string = "https://papago.naver.com/apis/langs/dect"
-	// DetectHeader contains Papago's Language Detection header for a request.
-	DetectHeader string = "\xaeU\xa4\xa8\x92%\xacUzV\xfd"
-	// DetectParams contains the formating string for a Language Detection request on Papago.
-	DetectParams string = "-%s\"}"
+	// translateURL contains Papago's translation URL.
+	translateURL string = "https://papago.naver.com/apis/n2mt/translate"
+	// translateHeader contains Papago's translation header for a request.
+	translateHeader string = "\xaeU\xb10\xa3\x1c/b\x160\xf5z\"7b0e4eca-c538-417f-8bf5-43a9e6ef160b\","
+	// translateParams contains the formating string for a translation request on Papago.
+	translateParams string = "\"dict\":true,\"dictDisplay\":30,\"source\":\"%s\",\"target\":\"%s\",\"text\":\"%s\"}"
+	// ttsURL contains Papago's TTS URL.
+	ttsURL string = "https://papago.naver.com/apis/tts/makeID"
+	// ttsHeader contains Papago's TTS header for a request.
+	ttsHeader string = "\xaeU\xae\xa1C\x9b,Uzd\xf8\xef"
+	// ttsParams contains the formating string for a TTS request on Papago.
+	ttsParams string = "pitch\":0,\"speaker\":\"%s\",\"speed\":%s,\"text\":\"%s\"}"
+	// detectURL contains Papago's Language Detection URL.
+	detectURL string = "https://papago.naver.com/apis/langs/dect"
+	// detectHeader contains Papago's Language Detection header for a request.
+	detectHeader string = "\xaeU\xa4\xa8\x92%\xacUzV\xfd"
+	// detectParams contains the formating string for a Language Detection request on Papago.
+	detectParams string = "-%s\"}"
 )
 
 // Translate translates the text from source Language to target Language
 func Translate(text string, source Language, target Language) (string, error) {
-	params := fmt.Sprintf(TranslateParams, source.Code(), target.Code(), text)
-	data := fmt.Sprintf("%s%s", TranslateHeader, params)
+	params := fmt.Sprintf(translateParams, source.Code(), target.Code(), text)
+	data := fmt.Sprintf("%s%s", translateHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
 	body := fmt.Sprintf("data=%s", encData)
-	resp, err := http.Post(TranslateURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	resp, err := http.Post(translateURL, "text/plain", bytes.NewBuffer([]byte(body)))
 	if err != nil {
 		return "", err
 	}
@@ -70,11 +70,11 @@ func TTS(text string, voice Voice) (string, error) {
 		desc := fmt.Sprintf("%s voice not supported for %s", voice.Gender, voice.Language)
 		return "", errors.New(desc)
 	}
-	params := fmt.Sprintf(TtsParams, name, voice.Speed, text)
-	data := fmt.Sprintf("%s%s", TtsHeader, params)
+	params := fmt.Sprintf(ttsParams, name, voice.Speed, text)
+	data := fmt.Sprintf("%s%s", ttsHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
 	body := fmt.Sprintf("data=%s", encData)
-	resp, err := http.Post(TtsURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	resp, err := http.Post(ttsURL, "text/plain", bytes.NewBuffer([]byte(body)))
 	if err != nil {
 		return "", err
 	}
@@ -91,18 +91,18 @@ func TTS(text string, voice Voice) (string, error) {
 	if !ok {
 		return "", errors.New("error decoding TTS type")
 	}
-	fileURL := strings.Replace(TtsURL, "makeID", ans, 1)
+	fileURL := strings.Replace(ttsURL, "makeID", ans, 1)
 	return fileURL, nil
 }
 
 // Detect tries to guess the input language from the given text
 func Detect(text string) (Language, error) {
 	var lang Language
-	params := fmt.Sprintf(DetectParams, text)
-	data := fmt.Sprintf("%s%s", DetectHeader, params)
+	params := fmt.Sprintf(detectParams, text)
+	data := fmt.Sprintf("%s%s", detectHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
 	body := fmt.Sprintf("data=%s", encData)
-	resp, err := http.Post(DetectURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	resp, err := http.Post(detectURL, "text/plain", bytes.NewBuffer([]byte(body)))
 	if err != nil {
 		return lang, err
 	}
