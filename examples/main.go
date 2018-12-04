@@ -48,7 +48,6 @@ func main() {
 		}
 		sourceLang = detectedLang
 	}
-	fmt.Println(*target)
 	targetLang, err := papago.ParseLanguageCode(*target)
 
 	// translation
