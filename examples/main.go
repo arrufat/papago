@@ -36,7 +36,7 @@ func main() {
 		fmt.Println("Specify some text to translate")
 		return
 	}
-	text := strings.Join(flag.Args()[1:], " ")
+	text := strings.Join(flag.Args(), " ")
 
 	// perform language detection if not source language not specified
 	var sourceLang papago.Language
