@@ -14,7 +14,7 @@ import (
 func main() {
 	source := flag.String("source", "", "code for the source language")
 	target := flag.String("target", "", "code for the target language")
-	list := flag.Bool("list", false, "list all possible language")
+	list := flag.Bool("list", false, "list all possible language codes")
 	output := flag.String("output", "", "path to the output file")
 	flag.Parse()
 
