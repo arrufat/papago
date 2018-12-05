@@ -31,13 +31,12 @@ func main() {
 		return
 	}
 
-	// use the rest of the arguments as the input text
-	if len(flag.Args()) == 0 {
+	// use the unparsed arguments as the input text
+	text := strings.Join(flag.Args(), " ")
+	if text == "" {
 		fmt.Println("Specify some text to translate")
 		return
 	}
-	text := strings.Join(flag.Args(), " ")
-
 	// perform language detection if not source language not specified
 	var sourceLang papago.Language
 	if *source == "" {
@@ -47,8 +46,20 @@ func main() {
 			return
 		}
 		sourceLang = detectedLang
+	} else {
+		parsedLang, err := papago.ParseLanguageCode(*source)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		sourceLang = parsedLang
 	}
+	// get the target language
 	targetLang, err := papago.ParseLanguageCode(*target)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// translation
 	fmt.Printf("Translating \"%s\" from %s to %s\n", text, sourceLang, targetLang)
