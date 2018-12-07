@@ -32,6 +32,51 @@ const (
 	detectParams string = "-%s\"}"
 )
 
+// TranslateResponse contains the structure of a translate response
+type TranslateResponse struct {
+	SrcLangType    string
+	TarLangType    string
+	TranslatedText string
+	Dict           Dict
+	TarDict        Dict
+	Delay          int
+	DelaySmt       int
+}
+
+// Dict structure in a TranslateResponse
+type Dict struct {
+	Items []DictItem
+}
+
+// DictItem is an entry in a Dict structure
+type DictItem struct {
+	Entry         string
+	SubEntry      string
+	MatchType     string
+	HanjaEntry    string
+	PhoneticSigns []PhoneticSign
+	Pos           []ItemPos
+	Source        string
+	URL           string
+	MURL          string
+}
+
+// PhoneticSign describes the phonetic sign in a DictItem
+type PhoneticSign struct {
+	Type string
+	Sign string
+}
+
+// ItemPos describes the item pos in a DictItem
+type ItemPos struct {
+	Type string
+}
+
+// PosMeaning describes the pos meaning in a DictItem
+type PosMeaning struct {
+	Meaning string
+}
+
 // Translate translates the text from source Language to target Language
 func Translate(text string, source Language, target Language) (string, error) {
 	params := fmt.Sprintf(translateParams, source.Code(), target.Code(), text)
@@ -46,15 +91,12 @@ func Translate(text string, source Language, target Language) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	res := make(map[string]interface{})
+	var res TranslateResponse
 	err = json.Unmarshal(bodyByte, &res)
 	if err != nil {
 		return "", err
 	}
-	ans, ok := res["translatedText"].(string)
-	if !ok {
-		return "", errors.New("error decoding translate type")
-	}
+	ans := res.TranslatedText
 	return ans, nil
 }
 
