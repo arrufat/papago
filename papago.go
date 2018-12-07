@@ -96,8 +96,7 @@ func Translate(text string, source Language, target Language) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	ans := res.TranslatedText
-	return ans, nil
+	return res.TranslatedText, nil
 }
 
 // TTS generates a URL to the MP3 file containing the sound
