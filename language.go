@@ -184,9 +184,27 @@ func (gender Gender) String() string {
 	return names[gender]
 }
 
+type Pitch int32
+
+// Possible values for Pitch
+const (
+	Lowest = iota - 5
+	SuperLow
+	VeryLow
+	Low
+	MidLow
+	Medium
+	MidHigh
+	High
+	VeryHigh
+	SuperHigh
+	Highest
+)
+
 // Voice contains the parameters for text to speech generation
 type Voice struct {
 	Language Language
 	Gender   Gender
 	Speed    Speed
+	Pitch    Pitch
 }

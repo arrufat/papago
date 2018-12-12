@@ -23,7 +23,7 @@ const (
 	// ttsHeader contains Papago's TTS header for a request.
 	ttsHeader string = "\xaeU\xae\xa1C\x9b,Uzd\xf8\xef"
 	// ttsParams contains the formating string for a TTS request on Papago.
-	ttsParams string = "pitch\":0,\"speaker\":\"%s\",\"speed\":%s,\"text\":\"%s\"}"
+	ttsParams string = "pitch\":%d,\"speaker\":\"%s\",\"speed\":%s,\"text\":\"%s\"}"
 	// detectURL contains Papago's Language Detection URL.
 	detectURL string = "https://papago.naver.com/apis/langs/dect"
 	// detectHeader contains Papago's Language Detection header for a request.
@@ -111,7 +111,7 @@ func TTS(text string, voice Voice) (string, error) {
 		desc := fmt.Sprintf("%s voice not supported for %s", voice.Gender, voice.Language)
 		return "", errors.New(desc)
 	}
-	params := fmt.Sprintf(ttsParams, name, voice.Speed, text)
+	params := fmt.Sprintf(ttsParams, voice.Pitch, name, voice.Speed, text)
 	data := fmt.Sprintf("%s%s", ttsHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
 	body := fmt.Sprintf("data=%s", encData)
