@@ -172,7 +172,7 @@ type Gender int32
 
 // Possible values for Gender
 const (
-	Male = iota
+	Male Gender = iota
 	Female
 )
 
@@ -184,11 +184,12 @@ func (gender Gender) String() string {
 	return names[gender]
 }
 
+// Pitch sets the TTS voice pitch
 type Pitch int32
 
 // Possible values for Pitch
 const (
-	Lowest = iota - 5
+	Lowest Pitch = iota - 5
 	SuperLow
 	VeryLow
 	Low
