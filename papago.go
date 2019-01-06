@@ -79,6 +79,7 @@ type PosMeaning struct {
 
 // Translate translates the text from source Language to target Language
 func Translate(text string, source Language, target Language) (string, error) {
+	text = strings.Replace(text, "\n", "\\n", -1)
 	params := fmt.Sprintf(translateParams, source.Code(), target.Code(), text)
 	data := fmt.Sprintf("%s%s", translateHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
@@ -111,6 +112,7 @@ func TTS(text string, voice Voice) (string, error) {
 		desc := fmt.Sprintf("%s voice not supported for %s", voice.Gender, voice.Language)
 		return "", errors.New(desc)
 	}
+	text = strings.Replace(text, "\n", "\\n", -1)
 	params := fmt.Sprintf(ttsParams, voice.Pitch, name, voice.Speed, text)
 	data := fmt.Sprintf("%s%s", ttsHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
