@@ -141,6 +141,7 @@ func TTS(text string, voice Voice) (string, error) {
 // Detect tries to guess the input language from the given text
 func Detect(text string) (Language, error) {
 	var lang Language
+	text = strings.Replace(text, "\n", "\\n", -1)
 	params := fmt.Sprintf(detectParams, text)
 	data := fmt.Sprintf("%s%s", detectHeader, params)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
