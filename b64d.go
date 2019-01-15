@@ -1,4 +1,4 @@
-// build +ignore
+// +build ignore
 
 // decode papago http payload from base64
 
