@@ -17,7 +17,7 @@ const (
 	// translateHeader contains Papago's translation header for a request.
 	translateHeader string = "\xaeU\xb10\xa3\x1c/b\x160\xf5z\"7b0e4eca-c538-417f-8bf5-43a9e6ef160b\","
 	// translateParams contains the formating string for a translation request on Papago.
-	translateParams string = "\"dict\":true,\"dictDisplay\":30,\"source\":\"%s\",\"target\":\"%s\",\"text\":\"%s\"}"
+	translateParams string = "\"dict\":%v,\"dictDisplay\":%d,\"instant\":%v,\"source\":\"%s\",\"target\":\"%s\",\"honorific\":%v,\"text\":\"%s\"}"
 	// ttsURL contains Papago's TTS URL.
 	ttsURL string = "https://papago.naver.com/apis/tts/makeID"
 	// ttsHeader contains Papago's TTS header for a request.
@@ -31,6 +31,31 @@ const (
 	// detectParams contains the formating string for a Language Detection request on Papago.
 	detectParams string = "-%s\"}"
 )
+
+// TranslateOptions defines the options for the Translate function
+type TranslateOptions struct {
+	// Dict controls wether to request the dictionary
+	Dict bool
+	// DictDisplay sets the maximum amount of entries in the dictionary
+	DictDisplay int
+	// Instant requests instant translation
+	Instant bool
+	// Source is the language code for the source language
+	Source string
+	// Target is the language code for the target language
+	Target string
+	// Honorific requests honorific translation (from en to ko only)
+	Honorific bool
+	// Text is the string to be translated from the source to the target language
+	Text string
+}
+
+func (opt TranslateOptions) String() string {
+	return fmt.Sprintf(translateParams,
+		opt.Dict, opt.DictDisplay, opt.Instant,
+		opt.Source, opt.Target, opt.Honorific,
+		opt.Text)
+}
 
 // TranslateResponse contains the structure of a translate response
 type TranslateResponse struct {
@@ -78,10 +103,12 @@ type PosMeaning struct {
 }
 
 // Translate translates the text from source Language to target Language
-func Translate(text string, source Language, target Language) (string, error) {
+func Translate(text string, source Language, target Language, opt TranslateOptions) (string, error) {
 	text = strings.Replace(text, "\n", "\\n", -1)
-	params := fmt.Sprintf(translateParams, source.Code(), target.Code(), text)
-	data := fmt.Sprintf("%s%s", translateHeader, params)
+	opt.Source = source.Code()
+	opt.Target = target.Code()
+	opt.Text = text
+	data := fmt.Sprintf("%s%s", translateHeader, opt)
 	encData := base64.StdEncoding.EncodeToString([]byte(data))
 	body := fmt.Sprintf("data=%s", encData)
 	resp, err := http.Post(translateURL, "text/plain", bytes.NewBuffer([]byte(body)))
