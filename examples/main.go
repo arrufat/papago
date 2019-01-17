@@ -60,8 +60,6 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	// opt := papago.TranslateOptions{}
-	// fmt.Println(opt)
 
 	// translation
 	fmt.Printf("Translating \"%s\" from %s to %s\n", text, sourceLang, targetLang)
