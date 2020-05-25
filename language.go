@@ -110,13 +110,13 @@ func (lang Language) FemaleVoice() string {
 		"",       // Traditional Chinese
 		"carmen", // Spanish
 		"roxane", // French
-		"",       // German
-		"",       // Russian
+		"lena",   // German
+		"vera",   // Russian
 		"",       // Portuguese
 		"",       // Italian
 		"",       // Vietnamese
 		"",       // Italian
-		"",       // Thai
+		"somsi",  // Thai
 		"",       // Indonesian
 		"",       // Hindi
 	}
@@ -133,13 +133,13 @@ func (lang Language) MaleVoice() string {
 		"",           // Traditional Chinese
 		"jose",       // Spanish
 		"louis",      // French
-		"",           // German
-		"",           // Russian
+		"tim",        // German
+		"aleksei",    // Russian
 		"",           // Portuguese
 		"",           // Italian
 		"",           // Vietnamese
 		"",           // Italian
-		"",           // Thai
+		"sarawut",    // Thai
 		"",           // Indonesian
 		"",           // Hindi
 	}
