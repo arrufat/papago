@@ -2,7 +2,6 @@ package papago
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,22 +13,16 @@ import (
 const (
 	// translateURL contains Papago's translation URL.
 	translateURL string = "https://papago.naver.com/apis/n2mt/translate"
-	// translateHeader contains Papago's translation header for a request.
-	translateHeader string = "\xaeU\xb10\xa3\x1c/b\x160\xf5z\"7b0e4eca-c538-417f-8bf5-43a9e6ef160b\","
 	// translateParams contains the formating string for a translation request on Papago.
-	translateParams string = "\"dict\":%v,\"dictDisplay\":%d,\"instant\":%v,\"source\":\"%s\",\"target\":\"%s\",\"honorific\":%v,\"text\":\"%s\"}"
+	translateParams string = "dict=%v&dictDisplay=%d&instant=%v&pagin=%v&source=%s&target=%s&honorific=%v&text=%s"
 	// ttsURL contains Papago's TTS URL.
 	ttsURL string = "https://papago.naver.com/apis/tts/makeID"
-	// ttsHeader contains Papago's TTS header for a request.
-	ttsHeader string = "\xaeU\xae\xa1C\x9b,Uzd\xf8\xef"
 	// ttsParams contains the formating string for a TTS request on Papago.
-	ttsParams string = "pitch\":%d,\"speaker\":\"%s\",\"speed\":%s,\"text\":\"%s\"}"
+	ttsParams string = "alpha=0&pitch=%d&speaker=%s&speed=%s&text=%s"
 	// detectURL contains Papago's Language Detection URL.
 	detectURL string = "https://papago.naver.com/apis/langs/dect"
-	// detectHeader contains Papago's Language Detection header for a request.
-	detectHeader string = "\xaeU\xa4\xa8\x92%\xacUzV\xfd"
 	// detectParams contains the formating string for a Language Detection request on Papago.
-	detectParams string = "-%s\"}"
+	detectParams string = "query=%s"
 )
 
 // TranslateOptions defines the options for the Translate function
@@ -40,6 +33,8 @@ type TranslateOptions struct {
 	DictDisplay int
 	// Instant requests instant translation
 	Instant bool
+	// Paging request
+	Paging bool
 	// Source is the language code for the source language
 	Source string
 	// Target is the language code for the target language
@@ -52,9 +47,8 @@ type TranslateOptions struct {
 
 func (opt TranslateOptions) String() string {
 	return fmt.Sprintf(translateParams,
-		opt.Dict, opt.DictDisplay, opt.Instant,
-		opt.Source, opt.Target, opt.Honorific,
-		opt.Text)
+		opt.Dict, opt.DictDisplay, opt.Instant, opt.Paging,
+		opt.Source, opt.Target, opt.Honorific, opt.Text)
 }
 
 // TranslateResponse contains the structure of a translate response
@@ -108,10 +102,8 @@ func Translate(text string, source Language, target Language, opt TranslateOptio
 	opt.Source = source.Code()
 	opt.Target = target.Code()
 	opt.Text = text
-	data := fmt.Sprintf("%s%s", translateHeader, opt)
-	encData := base64.StdEncoding.EncodeToString([]byte(data))
-	body := fmt.Sprintf("data=%s", encData)
-	resp, err := http.Post(translateURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	data := fmt.Sprintf("%s", opt)
+	resp, err := http.Post(translateURL, "text/plain", bytes.NewBuffer([]byte(data)))
 	if err != nil {
 		return "", err
 	}
@@ -141,10 +133,8 @@ func TTS(text string, voice Voice) (string, error) {
 	}
 	text = strings.Replace(text, "\n", "\\n", -1)
 	params := fmt.Sprintf(ttsParams, voice.Pitch, name, voice.Speed, text)
-	data := fmt.Sprintf("%s%s", ttsHeader, params)
-	encData := base64.StdEncoding.EncodeToString([]byte(data))
-	body := fmt.Sprintf("data=%s", encData)
-	resp, err := http.Post(ttsURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	data := fmt.Sprintf("%s", params)
+	resp, err := http.Post(ttsURL, "text/plain", bytes.NewBuffer([]byte(data)))
 	if err != nil {
 		return "", err
 	}
@@ -170,10 +160,8 @@ func Detect(text string) (Language, error) {
 	var lang Language
 	text = strings.Replace(text, "\n", "\\n", -1)
 	params := fmt.Sprintf(detectParams, text)
-	data := fmt.Sprintf("%s%s", detectHeader, params)
-	encData := base64.StdEncoding.EncodeToString([]byte(data))
-	body := fmt.Sprintf("data=%s", encData)
-	resp, err := http.Post(detectURL, "text/plain", bytes.NewBuffer([]byte(body)))
+	data := fmt.Sprintf("%s", params)
+	resp, err := http.Post(detectURL, "text/plain", bytes.NewBuffer([]byte(data)))
 	if err != nil {
 		return lang, err
 	}
