@@ -14,7 +14,7 @@ const (
 	// translateURL contains Papago's translation URL.
 	translateURL string = "https://papago.naver.com/apis/n2mt/translate"
 	// translateParams contains the formating string for a translation request on Papago.
-	translateParams string = "dict=%v&dictDisplay=%d&instant=%v&pagin=%v&source=%s&target=%s&honorific=%v&text=%s"
+	translateParams string = "dict=%v&dictDisplay=%d&instant=%v&paging=%v&source=%s&target=%s&honorific=%v&text=%s"
 	// ttsURL contains Papago's TTS URL.
 	ttsURL string = "https://papago.naver.com/apis/tts/makeID"
 	// ttsParams contains the formating string for a TTS request on Papago.
