@@ -1,6 +1,6 @@
 # Naver Papago Translate - unofficial
 
-[<img src="https://papago.naver.com/79a02f579e43a422f7ec25aec44f45cf.svg" alt="official website" width=320>](https://papago.naver.com/)
+[<img src="https://papago.naver.com/97ec80a681e94540414daf2fb855ba3b.svg" alt="official website" width=320>](https://papago.naver.com/)
 
 A simple wrapper around the web interface of Naver Papago Translate written in Go.
 
