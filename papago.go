@@ -11,7 +11,7 @@ import (
 
 const (
 	// translateURL contains Papago's translation URL.
-	translateURL string = "https://papago.naver.com/apis/nsmt/translate"
+	translateURL string = "https://papago.naver.com/apis/n2mt/translate"
 	// translateParams contains the formating string for a translation request on Papago.
 	translateParams string = "dict=%v&dictDisplay=%d&instant=%v&paging=%v&source=%s&target=%s&honorific=%v&text=%s"
 	// ttsURL contains Papago's TTS URL.
@@ -139,10 +139,24 @@ func Translate(text string, source Language, target Language, opt TranslateOptio
 	opt.Text = text
 	body := strings.NewReader(fmt.Sprintf("%s", opt))
 	req, err := http.NewRequest("POST", translateURL, body)
-	req.Header.Set("Timestamp", "1628232068892")
-	req.Header.Set("Authorization", "PPG 89ec95ad-1ebf-43eb-acea-653661f0dbe6:X4uS6kJfp+2m5sFw1v9L6Q==")
-	req.Header.Set("Cookie", "NID_SES=AAABjHpRnmUnAKvN7j50QJyAM353kTh0YMKVKOonJiYgvAxoJQa2U3O5IG3sBPZFtkrBXmuimi3JVVYJtoymasalkPGv9WXp7JY6UyyK3smN1n7dXZEA3c5cgDrFydJgzm0Q3uc+56THWBFVtTKnnPNOWUjy7TjwKCO5HdfOv2V2tB8NcTeyMuJwMwhk5vXFKejqujOQX10Z76wxwOT6Jl+1BEvW5ODqmtjvJCLRUIr4S5D+kgHzPtk1ov61zm8gjGjmQ7ovrFapeWaCZLnbqOVrvW8Wbgo/wgxhvwRvewJIVrPACwCahxGk8O42s7ZBzS1JPxsSfQ4mx7sm2SuDQD5DdfwjAQaXdgCZAED6rzaBayZ+1hhTHoVOR3QyeKLAMmm+ILgtGracHQpdqGAXDIyAQ7P27LN6t0//aW+JSiYi19uYNivDBY1LWk1ZaUgnKKabcZuK5uUYMhv43J+J/4kyI9ZP6uPt8L3xzeJirWb0Y8eR6GTeHbCZ6MRvXRMhe4d7htTlSn3v9bUfQxgoDHmQ37U=")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0")
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Accept-Language", "en")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+	req.Header.Set("Device-Type", "pc")
+	req.Header.Set("X-Apigw-Partnerid", "papago")
+	req.Header.Set("Timestamp", "1628410431800")
+	req.Header.Set("Origin", "https://papago.naver.com")
+	req.Header.Set("Dnt", "1")
+	req.Header.Set("Sec-Fetch-Dest", "empty")
+	req.Header.Set("Sec-Fetch-Mode", "cors")
+	req.Header.Set("Sec-Fetch-Site", "same-origin")
+	req.Header.Set("Sec-Gpc", "1")
+	req.Header.Set("Authorization", "PPG 89ec95ad-1ebf-43eb-acea-653661f0dbe6:HkbHZAAr0gkJBgX1+HxD1A==")
+	req.Header.Set("Referer", "https://papago.naver.com/")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Cookie", "nid_inf=389294109; NID_SES=AAABg9jc70bXZZL81Ybfe9qkezxKLchTl7b/RSGnYAr0B1ZmQrrkyHRy//OduSV2icNh040K6GfI8yG/a1xcLXKs3Q2IezozPiF/7cifXSLdrwG8cCQicPIUmG3l3hcz6HN0mYAhkcsTsetKjVld+gBrw56PBs+lFnlRYGMzBVxaYHcXfqW4Vv3e4xsBd5Z6GditvOzf8ih64MBBpOYmxnHp2/x1UK2bK9fAyDwwpjCRhFcaFjG0WSJu6NF4/wADuepnGUzPkXMXfrtfekxJIqdGPcf2HRSGwJkWbdzZ2mDkecoEtVWRBuSbzvP4SoTvJ+h8F3VE27+wSpTM8Fu0xZ92T201boFAVUGuHiJIfDEqG5B0mqI5XQzMSfZP0CbdH49j65fHr6d9u8pQWtd/UAsAnmYuGFglG5EYR6bXItdAaUKNUWuN5DNl4X0vOkCGtP6Mj8aPmonxh7WMxZjoti2WqHsTF21L/x892hyAWDl1pxCWKEiRBJ8rJtZa45qArDvHq+3beqolHvr25WeIoNgoRRg=; NID_AUT=qwnqOu7GMH7iHfu6JUiGwvBpSg/H0DxdR5Qz1WfEBuhQSOzE98duqnvtYujJq8gQ; NID_JKL=EqJzzBfo7DZd/cxyTExhOTgtVfKsE3RxX1kA45Q7iE0=; JSESSIONID=62EE77D7AFFD634F2237AE506BB04F56; papago_skin_locale=en")
+	req.Header.Set("Te", "trailers")
 
 	client := &http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
